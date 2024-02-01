@@ -119,6 +119,7 @@ import com.aerospike.client.util.Crypto;
 import com.aerospike.client.util.Pack;
 import com.aerospike.client.util.Packer;
 import com.aerospike.client.util.Util;
+import com.aerospike.client.Log;
 
 /**
  * Instantiate an <code>AerospikeClient</code> object to access an Aerospike
@@ -485,11 +486,13 @@ public class AerospikeClient implements IAerospikeClient, Closeable {
 	 */
 	public final void put(WritePolicy policy, Key key, Bin... bins)
 		throws AerospikeException {
+		long startTime = System.nanoTime();
 		if (policy == null) {
 			policy = writePolicyDefault;
 		}
 		WriteCommand command = new WriteCommand(cluster, policy, key, bins, Operation.Type.WRITE);
 		command.execute();
+		System.out.println("Time took to put " + (System.nanoTime()-startTime));
 	}
 
 	/**
@@ -641,11 +644,13 @@ public class AerospikeClient implements IAerospikeClient, Closeable {
 	 */
 	public final void add(WritePolicy policy, Key key, Bin... bins)
 		throws AerospikeException {
+		long startTime = System.nanoTime();
 		if (policy == null) {
 			policy = writePolicyDefault;
 		}
 		WriteCommand command = new WriteCommand(cluster, policy, key, bins, Operation.Type.ADD);
 		command.execute();
+		System.out.println("Time took to add " + (startTime + System.nanoTime()));
 	}
 
 	/**
@@ -1143,11 +1148,13 @@ public class AerospikeClient implements IAerospikeClient, Closeable {
 	 */
 	public final Record get(Policy policy, Key key)
 		throws AerospikeException {
+		long startTime = System.nanoTime();
 		if (policy == null) {
 			policy = readPolicyDefault;
 		}
 		ReadCommand command = new ReadCommand(cluster, policy, key);
 		command.execute();
+		System.out.println("Time took to get : " + (System.nanoTime()-startTime));
 		return command.getRecord();
 	}
 

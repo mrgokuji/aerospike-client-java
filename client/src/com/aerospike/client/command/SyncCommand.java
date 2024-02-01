@@ -21,6 +21,7 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import com.aerospike.client.AerospikeException;
+import com.aerospike.client.Log;
 import com.aerospike.client.ResultCode;
 import com.aerospike.client.cluster.Cluster;
 import com.aerospike.client.cluster.Connection;
@@ -75,7 +76,9 @@ public abstract class SyncCommand extends Command {
 		// Execute command until successful, timed out or maximum iterations have been reached.
 		while (true) {
 			try {
+				long startTime = System.nanoTime();
 				node = getNode();
+				Log.warn("Time took to getNode : " + (System.nanoTime()-startTime));
 			}
 			catch (AerospikeException ae) {
 				if (cluster.isActive()) {
@@ -91,6 +94,7 @@ public abstract class SyncCommand extends Command {
 			}
 
 			try {
+				long startTime = System.nanoTime();
 				node.validateErrorCount();
 
 				if (latencyType != LatencyType.NONE) {
@@ -117,7 +121,7 @@ public abstract class SyncCommand extends Command {
 						long elapsed = System.nanoTime() - begin;
 						node.addLatency(latencyType, elapsed);
 					}
-
+					Log.warn("Time took to make connection and execute command " + (System.nanoTime()-startTime));
 					// Command has completed successfully.  Exit method.
 					return;
 				}

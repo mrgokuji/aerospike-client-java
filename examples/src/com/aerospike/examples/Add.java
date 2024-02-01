@@ -44,9 +44,9 @@ public class Add extends Example {
 		console.info("Initial add will create record.  Initial value is " + bin.value + '.');
 		client.add(params.writePolicy, key, bin);
 
-		bin = new Bin(binName, 5);
-		console.info("Add " + bin.value + " to existing record.");
-		client.add(params.writePolicy, key, bin);
+//		bin = new Bin(binName, 5);
+//		console.info("Add " + bin.value + " to existing record.");
+//		client.add(params.writePolicy, key, bin);
 
 		Record record = client.get(params.policy, key, bin.name);
 
